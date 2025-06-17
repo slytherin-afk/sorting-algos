@@ -124,3 +124,75 @@ def _quick_sort(iterable):
         iterable[x] = right[y]
         x += 1
         y += 1
+
+
+# Heap Sort
+def heapsort(arr):
+    n = len(arr)
+
+    heapify(arr, len(arr))
+
+    for i in range(n - 1, 0, -1):
+        arr[0], arr[i] = arr[i], arr[0]
+        _bubble_down(arr, 0, i)
+
+
+def heapify(heap, length):
+    cur = (length - 2) >> 1
+
+    while cur >= 0:
+        _bubble_down(heap, cur, length)
+        cur -= 1
+
+
+def heappush(heap, item):
+    heap.append(item)
+    _bubbleup(heap, 0, len(heap) - 1)
+
+
+def heappop(heap):
+    last = heap.pop()
+
+    if not heap:
+        return last
+
+    returnitem = heap[0]
+    heap[0] = last
+    _bubble_down(heap, 0, len(heap))
+    return returnitem
+
+
+def _bubbleup(heap, start, pos):
+    item = heap[pos]
+
+    while start < pos:
+        parentpos = (pos - 1) >> 1
+        parent = heap[parentpos]
+        if parent < item:
+            heap[pos] = parent
+            pos = parentpos
+            continue
+        break
+
+    heap[pos] = item
+
+
+def _bubble_down(heap, pos, length):
+    item = heap[pos]
+    childpos = 2 * pos + 1
+
+    while childpos < length:
+        rightchild = 2 * pos + 2
+
+        if rightchild < length and heap[rightchild] > heap[childpos]:
+            childpos = rightchild
+
+        if item < heap[childpos]:
+            heap[pos] = heap[childpos]
+            pos = childpos
+            childpos = 2 * pos + 1
+            continue
+
+        break
+
+    heap[pos] = item
