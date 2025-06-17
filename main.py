@@ -30,36 +30,42 @@ def selection_sort(iterable):
 
 # Merge Sort
 def merge_sort(iterable):
-    if len(iterable) <= 1:
-        return
+    temp = iterable[:]
 
-    mid = len(iterable) // 2
-    left = iterable[:mid]
-    right = iterable[mid:]
+    def _merge_sort(iterable, temp, left, right):
+        if right - left <= 1:
+            return
 
-    merge_sort(left)
-    merge_sort(right)
+        mid = (right + left) // 2
 
-    i = j = k = 0
+        _merge_sort(iterable, temp, left, mid)
+        _merge_sort(iterable, temp, mid, right)
 
-    while i < len(left) and j < len(right):
-        if left[i] < right[j]:
-            iterable[k] = left[i]
+        i, j, k = left, mid, left
+
+        while i < mid and j < right:
+            if iterable[i] <= iterable[j]:
+                temp[k] = iterable[i]
+                i += 1
+            else:
+                temp[k] = iterable[j]
+                j += 1
+            k += 1
+
+        while i < mid:
+            temp[k] = iterable[i]
             i += 1
-        else:
-            iterable[k] = right[j]
+            k += 1
+
+        while j < right:
+            temp[k] = iterable[j]
             j += 1
-        k += 1
+            k += 1
 
-    while i < len(left):
-        iterable[k] = left[i]
-        i += 1
-        k += 1
+        for i in range(left, right):
+            iterable[i] = temp[i]
 
-    while j < len(right):
-        iterable[k] = right[j]
-        j += 1
-        k += 1
+    _merge_sort(iterable, temp, 0, len(iterable))
 
 
 # Bucket Sort
